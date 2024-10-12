@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  # app service
+  app:
+    build:
+      # build context is the current directory
+      context: .
+      args:
+        - DEV=true
+    # map port 8000 of local machine to port 8000 of docker container
+    ports:
+      - "8000:8000"
+    # mount app directory from local machine to app directory in docker container
+    volumes:
+      - ./app:/app
+    # run command to start django server in docker container
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
