@@ -15,10 +15,11 @@ WORKDIR /app
 # expose port 8000 of docker container
 EXPOSE 8000/tcp
 
+# set DEV to false
 ARG DEV=false
 # run commands in docker container
 RUN \
-  # create python virtual env `/py`
+  # create python virtual env `/py` directory
   python -m venv /py && \
   # upgrade pip
   /py/bin/pip install --upgrade pip && \
@@ -32,7 +33,7 @@ RUN \
   # if container is built using `docker compose`, then install packages in requirements.dev.txt
   if [ $DEV = "true" ]; \
     then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
-  fi && \
+fi && \
   # remove files in `/tmp` folder
   rm -rf /tmp && \
   # remove temporary dependencies folder
