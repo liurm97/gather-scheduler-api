@@ -17,3 +17,23 @@ services:
     # run command to start django server in docker container
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    # define environment variables to connect to db service
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
+    # wait for db service to start up before firing up app service
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17.0-alpine3.20
+    volumes:
+      - devdb:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+volumes:
+  devdb:
