@@ -14,9 +14,11 @@ services:
     # mount app directory from local machine to app directory in docker container
     volumes:
       - ./app:/app
-    # run command to start django server in docker container
+    # run command to first check if db is up, then apply migrations, then start django server
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000"
     # define environment variables to connect to db service
     environment:
       - DB_HOST=db
